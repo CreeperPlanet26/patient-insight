@@ -41,6 +41,10 @@ body {
   //   line-height: 1.5;
   font-family: "Rubik" !important;
   color: white !important;
+
+  @include laptop {
+    background: linear-gradient(253deg, rgba(0, 14, 98, 0.2) 0.95%, rgba(0, 14, 98, 0.24) 0.96%, rgba(9, 10, 13, 0.24) 76.87%), #111218;
+  }
 }
 
 /* Set the core h1 defaults */
