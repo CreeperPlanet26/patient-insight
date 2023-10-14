@@ -97,7 +97,7 @@
     margin-top: 2.5rem;
   }
 
-  a {
+  section a {
     margin: 0 auto;
     width: 10.2rem;
     height: 2.8rem;
@@ -105,13 +105,20 @@
     line-height: 36px;
     text-transform: none;
 
-    font-weight: $bold;
+    font-weight: 700;
+    text-decoration: none;
     font-size: 1.3rem;
     // padding: 0.5rem 2rem;
     border-radius: 1.78125rem;
     // width: 14.125rem;
     color: black;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(0, 0, 0, 0.6) 100%, rgba(0, 0, 0, 0) 100%), #fff;
+
+    @include laptop {
+      width: 10rem;
+      font-size: 1.5rem;
+      height: 3rem;
+    }
 
     &:hover {
       background: white;
@@ -148,12 +155,13 @@
       .try-btn {
         margin: 0;
         margin-top: 5rem;
+        // margin-left: ;
       }
     }
 
     img {
       margin: 0;
-      margin-top: -22rem;
+      margin-top: -25rem;
       margin-left: 7rem;
     }
   }

@@ -1,0 +1,95 @@
+.diagnose-page {
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 5rem;
+    width: 100%;
+
+    @include tablet {
+      margin-top: 1rem;
+    }
+
+    .patient-btn {
+      margin: 1rem 2rem;
+      height: 3rem;
+      font-size: 1rem;
+      color: #cbcbcb;
+      text-transform: none;
+      font-weight: 500;
+
+      @include tablet {
+        margin-left: 3rem;
+      }
+
+      svg {
+        margin-right: 1rem;
+        width: 1rem;
+      }
+    }
+  }
+
+  section {
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  h1 {
+    margin-top: 4rem;
+    color: #fff;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: normal;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    svg {
+      width: 1rem;
+      margin-right: 1rem;
+    }
+  }
+
+  p {
+    color: #9b9b9b;
+    font-weight: 400;
+    font-size: 1.5rem;
+    margin-bottom: 5rem;
+  }
+
+  .img-container {
+    overflow: hidden;
+  }
+
+  img {
+    width: 150vw;
+    height: 45vw;
+    right: 5rem;
+
+    display: block;
+    position: relative;
+  }
+
+  h2 {
+    color: #fff;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin: 0 auto;
+    margin-top: 5rem;
+    width: 75%;
+  }
+
+  .record {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.49) 100%), #183fb9;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 100rem;
+    margin: 0 auto;
+    margin-top: 2rem;
+  }
+}
