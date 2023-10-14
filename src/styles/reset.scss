@@ -35,7 +35,7 @@ dd {
 
 /* Set core body defaults */
 body {
-  background: $bg;
+  background: linear-gradient(277deg, rgba(9, 10, 13, 0.24) 0.41%, rgba(0, 14, 98, 0.2) 97.95%), #111218;
   scroll-behavior: smooth;
   text-rendering: optimizeSpeed;
   //   line-height: 1.5;
@@ -66,4 +66,35 @@ li,
   font-size: 1.5rem;
   font-weight: $semi-bold;
   color: $nav-text;
+}
+
+/* Remove list styles on ul, ol elements */
+ul,
+ol {
+  list-style: none;
+}
+
+/* Change angular material button hover color */
+@mixin mat-button {
+  background: #191b2b;
+}
+
+// .mat-button-base {
+//   font-weight: $bold !important;
+// }
+
+.MuiButton-root:hover {
+  @include mat-button();
+
+  &.on-card {
+    background: lighten(#191b2b, 6%);
+  }
+
+  &.on-bg-alt {
+    background: lighten($bg-alt, 2%);
+  }
+}
+
+.mat-icon-button:hover {
+  @include mat-button();
 }
