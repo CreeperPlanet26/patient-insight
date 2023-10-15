@@ -54,7 +54,7 @@
     }
   }
 
-  p {
+  .symptoms p {
     color: #9b9b9b;
     font-weight: 400;
     font-size: 1.5rem;
@@ -106,7 +106,7 @@
       }
 
       p {
-        color: white;
+        color: white !important;
         font-weight: 600;
         text-align: center;
         margin: 0 auto;
@@ -162,8 +162,8 @@
   }
 
   main {
-    animation: fadeout ease 0.5s;
-    animation-direction: reverse;
+    // animation: fadeout ease 0.5s;
+    // animation-direction: reverse;
   }
 }
 
@@ -180,12 +180,14 @@
   min-height: 81vh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   animation: fadeout ease 0.5s;
   animation-direction: reverse;
 
   .recording-btn {
-    margin-top: auto;
+    // margin-top: auto;
     // padding: 6px 12px;
   }
 
@@ -193,9 +195,34 @@
     width: 7rem;
     height: 7rem;
   }
+
+  p {
+    color: #fff;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 400;
+    // margin: 0 auto;
+    // margin-top: auto;
+    width: 75%;
+  }
+
+  .stopwatch-container {
+    margin-top: auto;
+  }
 }
 
-.is-recording {
+// .is-recording {
+//   animation: fadeout ease 0.5s;
+//   animation-fill-mode: forwards;
+//   -webkit-animation-fill-mode: forwards;
+// }
+
+.fade-in {
+  animation: fadeout ease 0.5s;
+  animation-direction: reverse;
+}
+
+.fade-out {
   animation: fadeout ease 0.5s;
   animation-fill-mode: forwards;
   -webkit-animation-fill-mode: forwards;

@@ -1,5 +1,5 @@
 "use client";
-
+import 'regenerator-runtime/runtime'
 import Image from "next/image";
 import { Button } from "@mui/material"
 import Link from "next/link";
@@ -7,18 +7,48 @@ import { PatientIcon } from "@/icons/PatientIcon";
 import { MicIcon } from "@/icons/MicIcon";
 import { StopRecordingIcon } from "@/icons/StopRecordingIcon";
 import { useState } from "react";
+import { StopWatch } from "@/components/StopWatch";
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
-
+type PageType = "prompt" | "recording" | "result";
 
 export default function Diagnose() {
-    const [isRecording, setIsRecording] = useState(false);
-    const [shouldRenderPrompt, setShouldRenderPrompt] = useState(true);
+    // const [isRecording, setIsRecording] = useState(false);
 
-    const onRecord = (value: boolean) => {
-        setIsRecording(value)
+    const [currentPage, setCurrentPage] = useState<PageType>("prompt");
+    const [promptPageClassNames, setPromptPageClassNames] = useState("fade-in");
+    const [recordingPageClassNames, setRecordingPageClassNames] = useState("");
+    const [resultPageClassNames, setResultPageClassNames] = useState("");
+
+    const [isStopWatchRunning, setIsStopWatchRunning] = useState(true);
+
+    const {
+        transcript,
+        listening,
+        resetTranscript,
+
+    } = useSpeechRecognition();
+
+    const onRecordPress = () => {
+        setPromptPageClassNames("fade-out");
+        setRecordingPageClassNames("fade-in");
 
         setTimeout(() => {
-            setShouldRenderPrompt(!value)
+            setCurrentPage("recording");
+        }, 500)
+
+        SpeechRecognition.startListening({ continuous: true })
+    }
+
+    const onStopRecordPress = () => {
+        setRecordingPageClassNames("fade-out");
+
+        transcript.split(" ").length <= 10 ? setPromptPageClassNames("fade-in") : setResultPageClassNames("fade-in");
+        SpeechRecognition.stopListening();
+        resetTranscript();
+
+        setTimeout(() => {
+            transcript.split(" ").length <= 10 ? setCurrentPage("prompt") : setCurrentPage("result");
         }, 500)
     }
 
@@ -30,7 +60,7 @@ export default function Diagnose() {
                     <PatientIcon /> Patient Insight</Button></Link>
             </nav>
 
-            {shouldRenderPrompt && <article className={isRecording === true ? "is-recording" : ""}>
+            {currentPage === "prompt" && <article className={promptPageClassNames}>
                 <main>
                     <section className="symptoms">
                         <h1><PatientIcon fill="white" /> Patient Insight</h1>
@@ -42,16 +72,21 @@ export default function Diagnose() {
                     <section className="record-container">
                         <h2>Explain your issues and have a diagnosis instantly</h2>
 
-                        <Button onClick={() => onRecord(true)} className="record" variant="contained"><MicIcon /></Button>
+                        <Button onClick={() => onRecordPress()} className="record" variant="contained"><MicIcon /></Button>
                     </section>
                 </main>
             </article>}
 
-            {!shouldRenderPrompt && <div className={"recording-container " + (isRecording === false ? "is-recording" : "")}>
-                <p>What are your symptoms?</p>
-                <Button onClick={() => onRecord(false)} className="recording-btn record" variant="contained"><StopRecordingIcon /></Button>
+            {currentPage === "recording" && <div className={"recording-container " + recordingPageClassNames}>
+                <StopWatch isRunning={isStopWatchRunning} />
+                <Button onClick={() => onStopRecordPress()} className="recording-btn record" variant="contained"><StopRecordingIcon /></Button>
+
+                <div className="transcript">{transcript}</div>
+
             </div>}
 
         </div >
     )
 }
+
+
