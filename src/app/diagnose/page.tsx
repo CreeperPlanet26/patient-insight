@@ -6,11 +6,13 @@ import Link from "next/link";
 import { PatientIcon } from "@/icons/PatientIcon";
 import { MicIcon } from "@/icons/MicIcon";
 import { StopRecordingIcon } from "@/icons/StopRecordingIcon";
-import { useEffect, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { StopWatch } from "@/components/StopWatch";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { useInterval } from '@/hooks/useInterval';
 
 type PageType = "prompt" | "recording" | "result";
+
 
 export default function Diagnose() {
     // const [isRecording, setIsRecording] = useState(false);
@@ -22,6 +24,10 @@ export default function Diagnose() {
 
     const [isStopWatchRunning, setIsStopWatchRunning] = useState(true);
     const { transcript, listening, resetTranscript, } = useSpeechRecognition();
+    const [lastSentTranscript, setLastSentTranscript] = useState("");
+
+    const [questions, setQuestions] = useState<string>('');
+    const [notes, setNotes] = useState<string>('');
 
     useEffect(() => {
         return () => {
@@ -29,6 +35,35 @@ export default function Diagnose() {
             resetTranscript();
         }
     }, [])
+
+    useInterval(async () => {
+        if (transcript === lastSentTranscript || !transcript) { console.log("the transcript was not for questions."); return; };
+        // console.log("This code should run every 5 seconds for questions");
+        // const url = new URL("http://localhost:3000/api/questions");
+        // url.searchParams.append("transcript questions", transcript);
+        // console.log("received questions", transcript)
+        // const r = await (await fetch(url)).json();
+        // setLastSentTranscript(transcript);
+        // setQuestions(r.questions);
+
+        // console.log(r)
+
+    }, 20000);
+
+    useInterval(async () => {
+        if (transcript === lastSentTranscript || !transcript) { console.log("the transcript was not sent for notes."); return; };
+        // console.log("This code should run every 5 seconds for notes");
+        // const url = new URL("http://localhost:3000/api/notes");
+        // url.searchParams.append("transcript notes", transcript);
+        // console.log("received notes", transcript)
+        // const r = await (await fetch(url)).json();
+        // setLastSentTranscript(transcript);
+        // setNotes(r.notes);
+
+        // console.log(r)
+
+    }, 20000);
+
 
     const onRecordPress = () => {
         setPromptPageClassNames("fade-out");
@@ -44,11 +79,16 @@ export default function Diagnose() {
     const onStopRecordPress = () => {
         setRecordingPageClassNames("fade-out");
 
-        transcript.split(" ").length <= 10 ? setPromptPageClassNames("fade-in") : setResultPageClassNames("fade-in");
+        if (transcript.split(" ").length <= 10) {
+            setPromptPageClassNames("fade-in");
+            resetTranscript();
+        }
+
         SpeechRecognition.stopListening();
-        resetTranscript();
+
 
         setTimeout(() => {
+            setRecordingPageClassNames("fade-in");
             transcript.split(" ").length <= 10 ? setCurrentPage("prompt") : setCurrentPage("result");
         }, 500)
     }
@@ -78,26 +118,27 @@ export default function Diagnose() {
                 </main>
             </article>}
 
-            {currentPage === "recording" && <div className={"recording-container " + recordingPageClassNames}>
+            {(currentPage !== "prompt") ? <div className={"recording-container " + recordingPageClassNames}>
                 <div className="cards-container">
-                    <div className="card questions">
+                    {currentPage === "result" && <div className="card result">
+                        <h1>Diagnosis</h1>
+                        <p>
+                            results will be here
+                        </p>
+                    </div>}
+
+                    {questions && <div className="card questions">
                         <h1>Questions</h1>
                         <p>
-                            1. Here is some?<br />
-                            2. Lorem, ipsum dolor.<br />
-                            4. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa laborum ipsum voluptatum eum eius libero porro repellat culpa ad voluptates.<br />
-                            5. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ex maiores dolorum perferendis facere natus in?<br />
+                            {questions.split("\n").map((q) => <>{q} <br /></>)}
                         </p>
-                    </div>
-                    <div className="card notes">
+                    </div>}
+                    {notes && <div className="card notes">
                         <h1>Notes</h1>
                         <p>
-                            1. Here is some?<br />
-                            2. Lorem, ipsum dolor.<br />
-                            4. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa laborum ipsum voluptatum eum eius libero porro repellat culpa ad voluptates.<br />
-                            5. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ex maiores dolorum perferendis facere natus in?<br />
+                            {notes.split("\n").map((q) => <>{q} <br /></>)}
                         </p>
-                    </div>
+                    </div>}
                     <div className="card notes">
                         <h1>Transcript</h1>
                         <p>
@@ -111,7 +152,7 @@ export default function Diagnose() {
                 <StopWatch isRunning={isStopWatchRunning} />
                 <Button onClick={() => onStopRecordPress()} className="recording-btn record" variant="contained"><StopRecordingIcon /></Button>
 
-            </div>}
+            </div> : null}
 
         </div >
     )
