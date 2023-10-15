@@ -160,4 +160,43 @@
       }
     }
   }
+
+  main {
+    animation: fadeout ease 0.5s;
+    animation-direction: reverse;
+  }
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.recording-container {
+  min-height: 75vh;
+  display: flex;
+  flex-direction: column;
+
+  animation: fadeout ease 0.5s;
+  animation-direction: reverse;
+
+  .recording-btn {
+    margin-top: auto;
+    padding: 6px 12px;
+  }
+
+  svg {
+    width: 7rem;
+    height: 7rem;
+  }
+}
+
+.is-recording {
+  animation: fadeout ease 0.5s;
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards;
 }
