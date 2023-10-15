@@ -58,7 +58,7 @@
     color: #9b9b9b;
     font-weight: 400;
     font-size: 1.5rem;
-    margin-bottom: 5rem;
+    margin-bottom: 3rem;
   }
 
   .img-container {
@@ -72,6 +72,7 @@
 
     display: block;
     position: relative;
+    z-index: -1;
   }
 
   h2 {
@@ -80,7 +81,7 @@
     font-size: 1.5rem;
     font-weight: 400;
     margin: 0 auto;
-    margin-top: 5rem;
+    margin-top: 4rem;
     width: 75%;
   }
 
@@ -90,6 +91,73 @@
     height: 4rem;
     border-radius: 100rem;
     margin: 0 auto;
-    margin-top: 2rem;
+    margin-top: 3rem;
+  }
+
+  @include laptop {
+    section {
+      width: 40%;
+      margin: 0;
+      justify-content: start;
+      align-items: start;
+
+      h1 {
+        display: none;
+      }
+
+      p {
+        color: white;
+        font-weight: 600;
+        text-align: center;
+        margin: 0 auto;
+        margin-top: 6rem;
+        margin-bottom: 7rem;
+      }
+    }
+
+    // .img-container {
+    //   width: 50rem;
+    //   height: 15rem;
+    //   left: 7rem;
+    //   float: right;
+    // }
+
+    img {
+      width: 80vw;
+      max-width: 70rem;
+      height: 20rem;
+      right: -7rem;
+      top: 13rem;
+      float: right;
+
+      -webkit-transform: scaleX(-1);
+      transform: scaleX(-1);
+      position: fixed;
+    }
+
+    .record-container {
+      width: 40%;
+      align-items: start;
+      justify-content: start;
+      flex-direction: column-reverse;
+      margin: 0;
+      // margin-left: ;
+
+      h2 {
+        margin: 0 auto;
+        width: 55%;
+      }
+
+      .record {
+        margin: 0 auto;
+        margin-bottom: 7rem;
+        width: 6rem;
+        height: 6rem;
+        svg {
+          width: 3rem;
+          height: 3rem;
+        }
+      }
+    }
   }
 }
