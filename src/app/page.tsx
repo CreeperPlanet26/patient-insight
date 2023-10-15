@@ -13,7 +13,7 @@ export default function Home() {
 
       <section>
         <h1>Diagnose in seconds</h1>
-        <p>Are you feeling sick but unsure about what exactly your disorder is? Well, PatientInsight is here to assist you with personalized health insights! Our product uses AI and advanced medical knowledge to diagnose your condition accurately in a matter of minutes. Specfically, PatientInsight takes in live-feed audio input and compares it to a vast database of medical conditions, symptoms, and case histories. Simply describe your symptoms orally, and our product will take it from there!</p>
+        <p>Are you feeling sick but unsure about what exactly your disorder is? Well, PatientInsight is here to assist you with personalized health insights! Our product takes in live-feed audio input and compares it to a vast database of medical conditions and case histories to diagnose your condition accurately in a matter of minutes. Simply describe your symptoms orally, and our product will take it from there!</p>
         <Link href="/diagnose"><Button className="try-btn" variant="contained" color="primary" target="_blank" href="/">
           Try now
         </Button> </Link>
