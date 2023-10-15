@@ -15,7 +15,6 @@ type PageType = "prompt" | "recording" | "result";
 
 
 export default function Diagnose() {
-    // const [isRecording, setIsRecording] = useState(false);
 
     const [currentPage, setCurrentPage] = useState<PageType>("prompt");
     const [promptPageClassNames, setPromptPageClassNames] = useState("fade-in");
