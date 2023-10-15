@@ -6,7 +6,7 @@ import Link from "next/link";
 import { PatientIcon } from "@/icons/PatientIcon";
 import { MicIcon } from "@/icons/MicIcon";
 import { StopRecordingIcon } from "@/icons/StopRecordingIcon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StopWatch } from "@/components/StopWatch";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
@@ -21,13 +21,14 @@ export default function Diagnose() {
     const [resultPageClassNames, setResultPageClassNames] = useState("");
 
     const [isStopWatchRunning, setIsStopWatchRunning] = useState(true);
+    const { transcript, listening, resetTranscript, } = useSpeechRecognition();
 
-    const {
-        transcript,
-        listening,
-        resetTranscript,
-
-    } = useSpeechRecognition();
+    useEffect(() => {
+        return () => {
+            SpeechRecognition.stopListening();
+            resetTranscript();
+        }
+    }, [])
 
     const onRecordPress = () => {
         setPromptPageClassNames("fade-out");
@@ -78,10 +79,37 @@ export default function Diagnose() {
             </article>}
 
             {currentPage === "recording" && <div className={"recording-container " + recordingPageClassNames}>
+                <div className="cards-container">
+                    <div className="card questions">
+                        <h1>Questions</h1>
+                        <p>
+                            1. Here is some?<br />
+                            2. Lorem, ipsum dolor.<br />
+                            4. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa laborum ipsum voluptatum eum eius libero porro repellat culpa ad voluptates.<br />
+                            5. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ex maiores dolorum perferendis facere natus in?<br />
+                        </p>
+                    </div>
+                    <div className="card notes">
+                        <h1>Notes</h1>
+                        <p>
+                            1. Here is some?<br />
+                            2. Lorem, ipsum dolor.<br />
+                            4. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa laborum ipsum voluptatum eum eius libero porro repellat culpa ad voluptates.<br />
+                            5. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ex maiores dolorum perferendis facere natus in?<br />
+                        </p>
+                    </div>
+                    <div className="card notes">
+                        <h1>Transcript</h1>
+                        <p>
+                            {/* {transcript.spli} */}
+                            {transcript}
+                        </p>
+                    </div>
+                </div>
+                <div className="transcript">{transcript}</div>
+
                 <StopWatch isRunning={isStopWatchRunning} />
                 <Button onClick={() => onStopRecordPress()} className="recording-btn record" variant="contained"><StopRecordingIcon /></Button>
-
-                <div className="transcript">{transcript}</div>
 
             </div>}
 
