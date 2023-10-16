@@ -152,7 +152,7 @@ export default function Diagnose() {
 
                     </div>}
 
-                    <div className="card questions">
+                    {transcript && <div className="card questions">
                         <h1>Questions</h1>
                         <p>
                             {questions.split("\n").map((q) => <>{q} <br /></>)}
@@ -160,8 +160,8 @@ export default function Diagnose() {
                         {!questions && <div className="progress"><CircularProgress size={60} /></div>}
 
 
-                    </div>
-                    <div className="card notes">
+                    </div>}
+                    {transcript && <div className="card notes">
                         <h1>Notes</h1>
                         <p>
                             {notes.split("\n").map((q) => <>{q} <br /></>)}
@@ -169,6 +169,7 @@ export default function Diagnose() {
                         </p>
                         {!questions && <div className="progress"><CircularProgress size={60} /></div>}
                     </div>
+                    }
                     <div className="card" ref={transcriptCardRef}>
                         <h1>Transcript</h1>
                         <p>
