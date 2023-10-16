@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
 import { OpenAI } from "openai";
 
-export const runtime = 'edge';
+export const config = {
+    runtime: 'edge',
+}
+
 
 
 export async function GET(req: Request) {
