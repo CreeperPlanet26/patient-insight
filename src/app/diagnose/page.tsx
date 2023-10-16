@@ -1,7 +1,8 @@
 "use client";
+
 import 'regenerator-runtime/runtime'
 import Image from "next/image";
-import { Button } from "@mui/material"
+import { Box, Button, CircularProgress } from "@mui/material"
 import Link from "next/link";
 import { PatientIcon } from "@/icons/PatientIcon";
 import { MicIcon } from "@/icons/MicIcon";
@@ -12,7 +13,8 @@ import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognitio
 import { useInterval } from '@/hooks/useInterval';
 
 type PageType = "prompt" | "recording" | "result";
-
+const BASE_URL = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://patient-insight.vercel.app";
+console.log("BASE_URL", BASE_URL)
 
 export default function Diagnose() {
 
@@ -20,6 +22,7 @@ export default function Diagnose() {
     const [promptPageClassNames, setPromptPageClassNames] = useState("fade-in");
     const [recordingPageClassNames, setRecordingPageClassNames] = useState("");
     const [resultPageClassNames, setResultPageClassNames] = useState("");
+    const transcriptCardRef = useRef<HTMLDivElement>(null);
 
     const [isStopWatchRunning, setIsStopWatchRunning] = useState(true);
     const { transcript, listening, resetTranscript, } = useSpeechRecognition();
@@ -27,6 +30,7 @@ export default function Diagnose() {
 
     const [questions, setQuestions] = useState<string>('');
     const [notes, setNotes] = useState<string>('');
+    const [results, setResults] = useState<string>('');
 
     useEffect(() => {
         return () => {
@@ -37,31 +41,31 @@ export default function Diagnose() {
 
     useInterval(async () => {
         if (transcript === lastSentTranscript || !transcript) { console.log("the transcript was not for questions."); return; };
-        // console.log("This code should run every 5 seconds for questions");
-        // const url = new URL("http://localhost:3000/api/questions");
-        // url.searchParams.append("transcript questions", transcript);
-        // console.log("received questions", transcript)
-        // const r = await (await fetch(url)).json();
-        // setLastSentTranscript(transcript);
-        // setQuestions(r.questions);
+        console.log("This code should run every 5 seconds for questions");
+        const url = new URL(`${BASE_URL}/api/questions`);
+        url.searchParams.append("transcript", transcript);
+        console.log("received questions", transcript)
+        const r = await (await fetch(url)).json();
+        setLastSentTranscript(transcript);
+        setQuestions(r.questions);
 
-        // console.log(r)
+        console.log(r)
 
-    }, 20000);
+    }, 35000);
 
     useInterval(async () => {
         if (transcript === lastSentTranscript || !transcript) { console.log("the transcript was not sent for notes."); return; };
-        // console.log("This code should run every 5 seconds for notes");
-        // const url = new URL("http://localhost:3000/api/notes");
-        // url.searchParams.append("transcript notes", transcript);
-        // console.log("received notes", transcript)
-        // const r = await (await fetch(url)).json();
-        // setLastSentTranscript(transcript);
-        // setNotes(r.notes);
+        console.log("This code should run every 5 seconds for notes");
+        const url = new URL(`${BASE_URL}/api/notes`);
+        url.searchParams.append("transcript", transcript);
+        console.log("received notes", transcript)
+        const r = await (await fetch(url)).json();
+        setLastSentTranscript(transcript);
+        setNotes(r.notes);
 
-        // console.log(r)
+        console.log(r)
 
-    }, 20000);
+    }, 35000);
 
 
     const onRecordPress = () => {
@@ -75,7 +79,7 @@ export default function Diagnose() {
         SpeechRecognition.startListening({ continuous: true })
     }
 
-    const onStopRecordPress = () => {
+    const onStopRecordPress = async () => {
         setRecordingPageClassNames("fade-out");
 
         if (transcript.split(" ").length <= 10) {
@@ -86,10 +90,29 @@ export default function Diagnose() {
         SpeechRecognition.stopListening();
 
 
+
         setTimeout(() => {
-            setRecordingPageClassNames("fade-in");
-            transcript.split(" ").length <= 10 ? setCurrentPage("prompt") : setCurrentPage("result");
+            if (transcript.split(" ").length <= 10) {
+                setCurrentPage("prompt")
+            } else {
+                setCurrentPage("result");
+                setRecordingPageClassNames("fade-in");
+
+                if (transcriptCardRef?.current) transcriptCardRef.current.style.display = "none";
+                setTimeout(() => {
+                    if (transcriptCardRef?.current) transcriptCardRef.current.style.display = "block";
+                }, 1)
+            }
         }, 500)
+
+        if (transcript.split(" ").length > 10) {
+            const url = new URL(`${BASE_URL}/api/diagnose`);
+            url.searchParams.append("transcript", transcript);
+            console.log("received diagnose", transcript)
+            const r = await (await fetch(url)).json();
+            setLastSentTranscript(transcript);
+            setResults(r.results);
+        }
     }
 
 
@@ -122,37 +145,42 @@ export default function Diagnose() {
                     {currentPage === "result" && <div className="card result">
                         <h1>Diagnosis</h1>
                         <p>
-                            results will be here
+                            {results.split("\n").map((q) => <>{q} <br /></>)}
+                            {/* {transcript} */}
+                            {!results && <div className="progress"><CircularProgress size={60} /></div>}
                         </p>
+
                     </div>}
 
-                    {questions && <div className="card questions">
+                    <div className="card questions">
                         <h1>Questions</h1>
                         <p>
                             {questions.split("\n").map((q) => <>{q} <br /></>)}
                         </p>
-                    </div>}
-                    {notes && <div className="card notes">
+                        {!questions && <div className="progress"><CircularProgress size={60} /></div>}
+
+
+                    </div>
+                    <div className="card notes">
                         <h1>Notes</h1>
                         <p>
                             {notes.split("\n").map((q) => <>{q} <br /></>)}
+
                         </p>
-                    </div>}
-                    <div className="card notes">
+                        {!questions && <div className="progress"><CircularProgress size={60} /></div>}
+                    </div>
+                    <div className="card" ref={transcriptCardRef}>
                         <h1>Transcript</h1>
                         <p>
-                            {/* {transcript.spli} */}
                             {transcript}
                         </p>
                     </div>
                 </div>
-                <div className="transcript">{transcript}</div>
+                {/* <div className="transcript">{transcript}</div> */}
 
-                <StopWatch isRunning={isStopWatchRunning} />
-                <Button onClick={() => onStopRecordPress()} className="recording-btn record" variant="contained"><StopRecordingIcon /></Button>
-
+                {currentPage === "recording" && <><StopWatch isRunning={isStopWatchRunning} />
+                    <Button onClick={async () => await onStopRecordPress()} className="recording-btn record" variant="contained"><StopRecordingIcon /></Button> </>}
             </div> : null}
-
         </div >
     )
 }

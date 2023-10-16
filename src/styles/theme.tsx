@@ -7,11 +7,11 @@ const theme = createTheme({
         text: {
             primary: "#FFFFFF",
         },
-        primary: {
-            main: "#ff3f3f",
-            light: "#e94d3d",
-            contrastText: "#fff",
-        },
+        // primary: {
+        //     // main: "#ff3f3f",
+        //     // light: "#e94d3d",
+        //     contrastText: "#fff",
+        // },
         secondary: {
             main: "#3f69ff",
             contrastText: "#fff",

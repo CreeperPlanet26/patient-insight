@@ -191,7 +191,7 @@
     // padding: 6px 12px;
   }
 
-  svg {
+  .recording-btn svg {
     width: 7rem;
     height: 7rem;
   }
@@ -224,13 +224,25 @@
 
   .cards-container {
     margin-top: 1.5rem;
+    width: 90vw;
 
     @include laptop {
       display: flex;
       flex-direction: row;
       gap: 2rem;
       // margin-left: 10rem;
-      width: 60vw;
+      max-width: 80vw;
+    }
+  }
+
+  @keyframes card-in {
+    from {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
     }
   }
 
@@ -244,7 +256,12 @@
     width: 75vw;
     max-width: 30rem;
     padding: 1rem 0rem;
+    margin: 0 auto;
     margin-bottom: 3.5rem;
+
+    animation-name: card-in;
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
 
     p {
       color: #fff;
@@ -261,6 +278,18 @@
       text-align: center;
       margin-bottom: 1.5rem;
     }
+  }
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  margin-bottom: 3rem;
+  span {
+    // width: 0px !important;
+    // height: 0px !important;
+    margin: auto;
   }
 }
 

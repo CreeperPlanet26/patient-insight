@@ -17,14 +17,14 @@ export async function GET(req: Request) {
 
         messages: [{
             role: "user", content: `The following transcript is either from just a patient or a conversation of both a doctor and a patient. 
-            Please create a diagnosis through a list of the symptoms provided. Please determine what that next steps are required such as medication and treatment throughout the list. There should be 5 elements in the list.
+            Please create a diagnosis through a list of the symptoms provided. Please determine what that next steps are required such as medication and treatment throughout the list. It should be a list of 5 items. Refer to them as if you were a doctor. Do not ask for more information. Do not repeat a dialog.
 
         
         Transcript: ${transcript}`,
         }]
     });
 
-    return NextResponse.json({ notes: chatCompletion.choices[0].message.content },
+    return NextResponse.json({ results: chatCompletion.choices[0].message.content },
         {
             status: 200,
         },
